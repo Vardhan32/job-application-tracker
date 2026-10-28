@@ -16,6 +16,10 @@ def seed():
 
     today = date.today()
 
+    def at(days_from_today, hour, minute=0):
+        target = datetime.now() + timedelta(days=days_from_today)
+        return target.replace(hour=hour, minute=minute, second=0, microsecond=0)
+
     applications = [
         {
             "company": "Zoho",
@@ -134,7 +138,7 @@ def seed():
         {
             "application": created[0],
             "round_name": "Technical Round 2",
-            "scheduled_at": datetime.now() + timedelta(days=3, hours=2),
+            "scheduled_at": at(3, 11),
             "mode": "video",
             "interviewer": "Engineering Manager",
             "outcome": "pending",
@@ -143,7 +147,7 @@ def seed():
         {
             "application": created[0],
             "round_name": "Technical Round 1",
-            "scheduled_at": datetime.now() - timedelta(days=5),
+            "scheduled_at": at(-5, 16),
             "mode": "video",
             "interviewer": "Senior Engineer",
             "outcome": "passed",
@@ -152,7 +156,7 @@ def seed():
         {
             "application": created[2],
             "round_name": "System Design",
-            "scheduled_at": datetime.now() + timedelta(days=1, hours=5),
+            "scheduled_at": at(2, 15),
             "mode": "video",
             "interviewer": "Staff Engineer",
             "outcome": "pending",
@@ -161,7 +165,7 @@ def seed():
         {
             "application": created[3],
             "round_name": "HR Discussion",
-            "scheduled_at": datetime.now() - timedelta(days=9),
+            "scheduled_at": at(-9, 10),
             "mode": "phone",
             "interviewer": "HR Partner",
             "outcome": "passed",
