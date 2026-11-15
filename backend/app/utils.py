@@ -68,7 +68,11 @@ class Validator:
                 self.errors[key] = f"{label} is required."
             return None
         try:
-            return date.fromisoformat(str(value))
+            parsed = date.fromisoformat(str(value))
+            if parsed.year < 1990 or parsed.year > 2100:
+                self.errors[key] = f"{label} year must be between 1990 and 2100."
+                return None
+            return parsed
         except ValueError:
             self.errors[key] = f"{label} must use the YYYY-MM-DD format."
             return None
@@ -82,6 +86,9 @@ class Validator:
             return None
         try:
             parsed = datetime.fromisoformat(str(value).replace("Z", "+00:00"))
+            if parsed.year < 1990 or parsed.year > 2100:
+                self.errors[key] = f"{label} year must be between 1990 and 2100."
+                return None
             return parsed.replace(tzinfo=None)
         except ValueError:
             self.errors[key] = f"{label} must be a valid date and time."

@@ -42,7 +42,7 @@ backend/
     models.py         User, Application, Interview
     utils.py          validation, JWT user lookup, pagination
     seed.py           demo data
-  tests/              15 API tests
+  tests/              17 API tests
   schema.sql          MySQL DDL
   run.py              development entry point
 frontend/

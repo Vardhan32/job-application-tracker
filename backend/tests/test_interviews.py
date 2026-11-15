@@ -111,3 +111,35 @@ def test_interviews_are_scoped_to_owner(client, register):
         ).status_code
         == 404
     )
+
+
+def test_interview_auto_advances_wishlist_status(client, auth_headers):
+    application_id = create_application(
+        client, auth_headers, status="wishlist", applied_on=None
+    ).get_json()["application"]["id"]
+
+    scheduled_at = (datetime.now() + timedelta(days=2)).isoformat()
+    client.post(
+        f"/api/applications/{application_id}/interviews",
+        json={"round_name": "Screening", "scheduled_at": scheduled_at},
+        headers=auth_headers,
+    )
+
+    detail = client.get(
+        f"/api/applications/{application_id}", headers=auth_headers
+    ).get_json()["application"]
+
+    assert detail["status"] == "interviewing"
+    assert detail["applied_on"] is not None
+
+
+def test_interview_scheduled_at_year_bounds(client, auth_headers):
+    application_id = create_application(client, auth_headers).get_json()["application"]["id"]
+
+    response = client.post(
+        f"/api/applications/{application_id}/interviews",
+        json={"round_name": "Screening", "scheduled_at": "1899-01-01T10:00:00"},
+        headers=auth_headers,
+    )
+    assert response.status_code == 422
+    assert "scheduled_at" in response.get_json()["errors"]
