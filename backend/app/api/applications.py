@@ -237,6 +237,10 @@ def create_interview(application_id):
     validator.raise_if_errors()
 
     interview = Interview(application_id=application.id, **fields)
+    if application.status == "wishlist":
+        application.status = "interviewing"
+        if not application.applied_on:
+            application.applied_on = date.today()
     db.session.add(interview)
     db.session.commit()
 
